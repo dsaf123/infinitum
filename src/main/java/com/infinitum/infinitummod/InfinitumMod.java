@@ -1,7 +1,9 @@
 package com.infinitum.infinitummod;
 
+import com.infinitum.infinitummod.blocks.BasicGeneratorScreen;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +23,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.stream.Collectors;
 
 import com.infinitum.infinitummod.util.RegistryHandler;
+
+import static com.infinitum.infinitummod.util.RegistryHandler.BASIC_GENERATOR_CONTAINER;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("infinitummod")
@@ -57,7 +61,7 @@ public class InfinitumMod
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-       
+        ScreenManager.registerFactory(BASIC_GENERATOR_CONTAINER.get(), BasicGeneratorScreen::new);
     }
 
     public static final ItemGroup TAB = new ItemGroup("infinitumTab") {

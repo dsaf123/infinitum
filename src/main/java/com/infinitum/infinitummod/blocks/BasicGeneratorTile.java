@@ -12,7 +12,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,8 +30,9 @@ import static com.infinitum.infinitummod.util.RegistryHandler.BASIC_GENERATOR_TI
 
 public class BasicGeneratorTile extends TileEntity implements ITickableTileEntity {
 
-    private final ItemStackHandler itemHandler = createHandler();
-    private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+    private final LazyOptional<IItemHandler> handler = LazyOptional.of(this::createHandler);
+    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of( this::createEnergy);
+    private int counter;
 
     public BasicGeneratorTile() {
         super(BASIC_GENERATOR_TILE.get());
@@ -41,16 +46,29 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
 
     @Override
     @MethodsReturnNonnullByDefault
-    public CompoundNBT write(CompoundNBT compound) {
-        compound.put("inv", itemHandler.serializeNBT());
-        return super.write(compound);
+    public CompoundNBT write(CompoundNBT tag) {
+        handler.ifPresent(h -> {
+            CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
+            tag.put("inv", compound);
+        });
+        energy.ifPresent(h -> {
+            CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
+            tag.put("energy", compound);
+        });
+
+        tag.putInt("counter", counter);
+        return super.write(tag);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public void read(BlockState state, CompoundNBT nbt) {
+        CompoundNBT invTag = nbt.getCompound("inv");
+        handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(invTag));
+        CompoundNBT energyTag = nbt.getCompound("energy");
+        energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(energyTag));
 
-        itemHandler.deserializeNBT(nbt.getCompound("inv"));
+        counter = nbt.getInt("counter");
         super.read(state, nbt);
     }
     private ItemStackHandler createHandler() {
@@ -72,7 +90,14 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handler.cast();
         }
+        if (cap == CapabilityEnergy.ENERGY) {
+            return energy.cast();
+        }
         return super.getCapability(cap, side);
+    }
+
+    private IEnergyStorage createEnergy() {
+        return new EnergyStorage(100000, 0);
     }
 
 }

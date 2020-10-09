@@ -3,10 +3,13 @@ package com.infinitum.infinitummod.blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -28,10 +31,10 @@ public class BasicGeneratorContainer extends Container {
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(playerInventory);
 
-
+        layoutPlayerInventorySlots(8, 84);
         if (tileEntity != null) {
             tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 64, 24));
+                addSlot(new SlotItemHandler(h, 0, 80, 40));
             });
         }
 
@@ -67,4 +70,11 @@ public class BasicGeneratorContainer extends Container {
     public boolean canInteractWith(PlayerEntity playerIn) {
         return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, BASIC_GENERATOR.get());
     }
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        return super.transferStackInSlot(playerIn, index);
+    }
+
+
 }

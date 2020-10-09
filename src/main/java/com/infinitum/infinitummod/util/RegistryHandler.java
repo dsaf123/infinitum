@@ -56,6 +56,7 @@ public class RegistryHandler {
         BIOMES.register(FMLJavaModLoadingContext.get().getModEventBus());
         DECORATORS.register(FMLJavaModLoadingContext.get().getModEventBus());
         TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 
@@ -114,6 +115,8 @@ public class RegistryHandler {
             return new BasicGeneratorContainer(windowId, world, pos, inv, inv.player);
         }
     ));
+
+    // Screens
 
 
     // Biomes
