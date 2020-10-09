@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "infinitummod:items/adamant_ingot"
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+      "item": "infinitummod:unbaked_circuit_board"
+    },
+    "result": "infinitummod:circuit_board",
+    "experience": 4,
+    "cookingtime": 1600
+  }

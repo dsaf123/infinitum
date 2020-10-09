@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "infinitummod:block/basic_generator" },
+    "facing=south": { "model": "infinitummod:block/basic_generator", "y": 180 },
+    "facing=east": { "model": "infinitummod:block/basic_generator", "y": 90 },
+    "facing=west": { "model": "infinitummod:block/basic_generator","y": 270 },
+    "facing=up": { "model": "infinitummod:block/basic_generator", "x": -90 },
+    "facing=down": { "model": "infinitummod:block/basic_generator", "x": 90 }
+  }
+}

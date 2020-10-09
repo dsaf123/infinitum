@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+      "yyy",
+      "xxx"
+    ],
+    "key":
+    {
+      
+      "x":
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      "y": {
+        "item": "minecraft:string"
+      }
+    },
+    "result":
+    {
+      "item": "infinitummod:iron_wire",
+      "count": 3
+    }
+  }

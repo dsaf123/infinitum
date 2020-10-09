@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern":
+    [
+      "yyy",
+      "xzx"
+    ],
+    "key":
+    {
+      
+      "x":
+      {
+        "item": "minecraft:gold_ingot"
+      },
+      "y": {
+        "item": "infinitummod:iron_wire"
+      },
+      "z": {
+        "item": "minecraft:diamond"
+      }
+    },
+    "result":
+    {
+      "item": "infinitummod:unbaked_circuit_board",
+      "count": 1
+    }
+}
