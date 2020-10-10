@@ -76,10 +76,10 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
 
                 @Override
                 public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                    if (stack.getItem() != Items.DIAMOND) {
+                    if (!BasicGeneratorTile.isItemValid(slot, stack)) {
                         return false;
                     }
-                    return super.isItemValid(slot, stack);
+                    return true;
                 }
             };
     }
@@ -94,6 +94,13 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
             return energy.cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    public static boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        if (stack.getItem() != Items.DIAMOND) {
+            return false;
+        }
+        return true;
     }
 
     private IEnergyStorage createEnergy() {

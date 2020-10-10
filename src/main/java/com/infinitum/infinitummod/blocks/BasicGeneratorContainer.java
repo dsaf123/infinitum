@@ -3,7 +3,9 @@ package com.infinitum.infinitummod.blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
@@ -73,7 +75,47 @@ public class BasicGeneratorContainer extends Container {
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-        return super.transferStackInSlot(playerIn, index);
+        // Function taken from Furnace implementation
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            // IF clicking from inventory TO the Container
+             if (index != 36) {
+                if (BasicGeneratorTile.isItemValid(index, itemstack)) {
+
+                    if (!this.mergeItemStack(itemstack1, 36, 37, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                    // IF in inventory section (and not able to go into the container we put it in the hot bar)
+                } else if (index >= 1 && index < 28) {
+                    if (!this.mergeItemStack(itemstack1, 30, 37, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                    // If in hot bar section (and not able to go into the container we put it in the inventory)
+                } else if (index >= 30 && index < 38 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+                    return ItemStack.EMPTY;
+                }
+                // If clicking from Container (index = 0 because only 1 slot) to inventory
+            } else if (!this.mergeItemStack(itemstack1, 0, 37, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(playerIn, itemstack1);
+        }
+
+        return itemstack;
     }
 
 
