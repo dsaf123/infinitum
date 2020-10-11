@@ -68,9 +68,11 @@ public class BasicGenerator extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        //super.fillStateContainer(builder); is empty
-        builder.add(BlockStateProperties.FACING);
+        super.fillStateContainer(builder); // Is empty, but perhaps it could be changed in the future to include more state information
+        builder.add(BlockStateProperties.FACING, BlockStateProperties.POWERED);
     }
+    // Deprecated but according to sources, it means don't call in block but blockstate is fine?? Seems to be commonplace
+    //   in other mods
     @SuppressWarnings("deprication")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
