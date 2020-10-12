@@ -1,6 +1,9 @@
 package com.infinitum.infinitummod.util;
 
 import com.infinitum.infinitummod.blocks.*;
+import com.infinitum.infinitummod.blocks.basicgenerator.BasicGenerator;
+import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorContainer;
+import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorTile;
 import com.infinitum.infinitummod.world.gen.biome.OrchardBiome;
 import com.infinitum.infinitummod.InfinitumMod;
 import com.infinitum.infinitummod.armor.ModArmorMaterial;
@@ -9,7 +12,6 @@ import com.infinitum.infinitummod.items.ItemBase;
 import com.infinitum.infinitummod.items.PoisonApple;
 import com.infinitum.infinitummod.tools.ModItemTier;
 
-import com.infinitum.infinitummod.world.gen.feature.ModFeatures;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.ContainerType;
@@ -17,26 +19,17 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.SwordItem;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
-
-
-
-import java.rmi.registry.Registry;
-
-import static com.infinitum.infinitummod.world.gen.feature.ModFeatures.GLOW_ORE;
 
 
 public class RegistryHandler {

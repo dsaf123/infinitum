@@ -1,9 +1,10 @@
-package com.infinitum.infinitummod.blocks;
+package com.infinitum.infinitummod.blocks.basicgenerator;
 
 import com.infinitum.infinitummod.tools.CustomEnergyStorage;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,7 +16,6 @@ import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -31,6 +31,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.infinitum.infinitummod.util.RegistryHandler.BASIC_GENERATOR_TILE;
+import static net.minecraftforge.common.ForgeHooks.getBurnTime;
 
 public class BasicGeneratorTile extends TileEntity implements ITickableTileEntity {
 
@@ -41,6 +42,8 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     private LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     private int counter;
 
+
+
     public BasicGeneratorTile() {
         super(BASIC_GENERATOR_TILE.get());
     }
@@ -49,18 +52,19 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     @Override
     public void tick() {
 
-        int burnTime = 200;
-        int totalEnergyGenerated = 100000;
+
+        int energyPerTick = 5;
 
         // Remove after done debugging
-        System.out.println(energyStorage.getEnergyStored());
+
+        System.out.println(counter);
         // Only let the server make these calculations
         if (world.isRemote) {
             return;
         }
         if (counter > 0) {
             counter--;
-            energyStorage.addEnergy(totalEnergyGenerated / burnTime);
+            energyStorage.addEnergy(energyPerTick);
             markDirty();
         }
 
@@ -68,9 +72,12 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
             ItemStack stack = itemHandler.getStackInSlot(0);
             if (isItemValid(0, stack)) {
                 // Remove that item and start generating
-                itemHandler.extractItem(0, 1, false);
-                energyStorage.addEnergy(totalEnergyGenerated / burnTime);
-                counter = burnTime;
+
+                //energyStorage.addEnergy(totalEnergyGenerated / burnTime);
+                ItemStack extracted = itemHandler.extractItem(0, 1, true);
+
+                counter = getBurnTime(extracted);
+                stack.shrink(1);
                 markDirty();
             }
         }
@@ -111,6 +118,7 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
             }
         }
     }
+
     @Override
     public void remove() {
         super.remove();
@@ -121,32 +129,29 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     @Override
     @MethodsReturnNonnullByDefault
     public CompoundNBT write(CompoundNBT tag) {
-        handler.ifPresent(h -> {
-            CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
-            tag.put("inv", compound);
-        });
-        energy.ifPresent(h -> {
-            CompoundNBT compound = ((INBTSerializable<CompoundNBT>) h).serializeNBT();
-            tag.put("energy", compound);
-        });
-
+        tag.put("inv", itemHandler.serializeNBT());
+        tag.put("energy", energyStorage.serializeNBT());
         tag.putInt("counter", counter);
         return super.write(tag);
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void read(BlockState state, CompoundNBT nbt) {
-        CompoundNBT invTag = nbt.getCompound("inv");
-        handler.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(invTag));
-        CompoundNBT energyTag = nbt.getCompound("energy");
-        energy.ifPresent(h -> ((INBTSerializable<CompoundNBT>) h).deserializeNBT(energyTag));
+    public void read(BlockState state, CompoundNBT tag) {
+        itemHandler.deserializeNBT(tag.getCompound("inv"));
+        energyStorage.deserializeNBT(tag.getCompound("energy"));
 
-        counter = nbt.getInt("counter");
-        super.read(state, nbt);
+        counter = tag.getInt("counter");
+
+        super.read(state, tag);
     }
     private ItemStackHandler createHandler() {
             return new ItemStackHandler(1) {
+                @Override
+                protected void onContentsChanged(int slot) {
+                    markDirty();
+                    super.onContentsChanged(slot);
+                }
 
                 @Override
                 public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -171,10 +176,7 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     }
 
     public static boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        if (stack.getItem() != Items.DIAMOND) {
-            return false;
-        }
-        return true;
+        return getBurnTime(stack) > 0;
     }
 
     private CustomEnergyStorage createEnergy() {

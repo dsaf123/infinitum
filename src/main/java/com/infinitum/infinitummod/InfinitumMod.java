@@ -1,6 +1,6 @@
 package com.infinitum.infinitummod;
 
-import com.infinitum.infinitummod.blocks.BasicGeneratorScreen;
+import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorScreen;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;

@@ -1,4 +1,4 @@
-package com.infinitum.infinitummod.blocks;
+package com.infinitum.infinitummod.blocks.basicgenerator;
 
 import com.infinitum.infinitummod.tools.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
@@ -6,20 +6,22 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
+
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
+
+import javax.annotation.Nonnull;
 
 import static com.infinitum.infinitummod.util.RegistryHandler.BASIC_GENERATOR;
 import static com.infinitum.infinitummod.util.RegistryHandler.BASIC_GENERATOR_CONTAINER;
@@ -38,9 +40,7 @@ public class BasicGeneratorContainer extends Container {
 
         layoutPlayerInventorySlots(8, 84);
         if (tileEntity != null) {
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 80, 40));
-            });
+            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> addSlot(new SlotItemHandler(h, 0, 80, 40)));
         }
         trackPower();
     }
@@ -72,7 +72,10 @@ public class BasicGeneratorContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
+        if (tileEntity.getWorld() == null) {
+            return false;
+        }
         return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()), playerEntity, BASIC_GENERATOR.get());
     }
 
@@ -114,7 +117,8 @@ public class BasicGeneratorContainer extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    @Nonnull
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
         // Function taken from Furnace implementation
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
