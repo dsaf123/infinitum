@@ -2,4 +2,5 @@
 This is a mod that is not currently ready for release.
 
 ### TODO
-- Finish implementing the Basic Generator
+[] Finish implementing the Basic Generator
+[] Documentation (As always)
