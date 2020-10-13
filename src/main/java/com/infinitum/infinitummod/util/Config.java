@@ -21,6 +21,7 @@ public class Config {
 
     public static ForgeConfigSpec.IntValue BASIC_GENERATOR_CAPACITY;
     public static ForgeConfigSpec.IntValue BASIC_GENERATOR_MAX_EXTRACT;
+    public static ForgeConfigSpec.IntValue BASIC_GENERATOR_GENERATION;
 
     static {
         COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
@@ -28,7 +29,8 @@ public class Config {
 
         COMMON_BUILDER.comment("Power Settings").push(CATEGORY_POWER);
         BASIC_GENERATOR_CAPACITY = COMMON_BUILDER.comment("Capacity for Basic Generator").defineInRange("BasicGeneratorCapacity", 100000, 0, Integer.MAX_VALUE);
-        BASIC_GENERATOR_MAX_EXTRACT = COMMON_BUILDER.comment("Maximum RF/tick output for Basic Generator").defineInRange("BasicGeneratorExtract", 1000, 0, Integer.MAX_VALUE);
+        BASIC_GENERATOR_MAX_EXTRACT = COMMON_BUILDER.comment("Maximum RF/tick output/extract for Basic Generator").defineInRange("BasicGeneratorExtract", 1000, 0, Integer.MAX_VALUE);
+        BASIC_GENERATOR_GENERATION = COMMON_BUILDER.comment("RF/tick Generation for Basic Generator (Burns fuel for standard vanilla times)").defineInRange("BasicGeneratorGeneration", 5, 0, Integer.MAX_VALUE);
         COMMON_BUILDER.pop();
 
         COMMON_CONFIG = COMMON_BUILDER.build();

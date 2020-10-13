@@ -53,30 +53,27 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     @Override
     public void tick() {
 
-
-        int energyPerTick = 5;
-
-        // Remove after done debugging
-
-        System.out.println(counter);
         // Only let the server make these calculations
         if (world.isRemote) {
             return;
         }
+        // If we are burning
         if (counter > 0) {
             counter--;
-            energyStorage.addEnergy(energyPerTick);
+            energyStorage.addEnergy(Config.BASIC_GENERATOR_GENERATION.get());
             markDirty();
         }
-
+        // If we are not burning after last change
         if (counter <= 0) {
             ItemStack stack = itemHandler.getStackInSlot(0);
             if (isItemValid(0, stack)) {
-                // Remove that item and start generating
 
-                //energyStorage.addEnergy(totalEnergyGenerated / burnTime);
+                // Remove that item and start generating
                 ItemStack extracted = itemHandler.extractItem(0, 1, true);
 
+                // TODO : If item is fuel in a bucket (lava + other mod items) leave the bucket
+
+                // Vanilla getBurnTime gets how long fuel tagged items will burn for
                 counter = getBurnTime(extracted);
                 stack.shrink(1);
                 markDirty();

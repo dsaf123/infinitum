@@ -4,6 +4,7 @@ import com.infinitum.infinitummod.blocks.*;
 import com.infinitum.infinitummod.blocks.basicgenerator.BasicGenerator;
 import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorContainer;
 import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorTile;
+import com.infinitum.infinitummod.blocks.ores.TinOre;
 import com.infinitum.infinitummod.world.gen.biome.OrchardBiome;
 import com.infinitum.infinitummod.InfinitumMod;
 import com.infinitum.infinitummod.armor.ModArmorMaterial;
