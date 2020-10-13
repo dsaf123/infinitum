@@ -44,12 +44,16 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     private int counter;
 
 
-
+    /**
+     * Basic Generator Tile Entity constructor
+     */
     public BasicGeneratorTile() {
         super(BASIC_GENERATOR_TILE.get());
     }
 
-
+    /**
+     * tick function is called every tick by minecraft (20 times per second)
+     */
     @Override
     public void tick() {
 
@@ -89,7 +93,9 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
 
     }
 
-
+    /**
+     * sendOutPower is called in tick function and pushes out power to neighboring tile entities
+     */
     private void sendOutPower() {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
 
@@ -117,6 +123,9 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
         }
     }
 
+    /**
+     * Invalidate handlers telling them they need to update
+     */
     @Override
     public void remove() {
         super.remove();
@@ -124,6 +133,11 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
         energy.invalidate();
     }
 
+    /**
+     * Write values to save when the server shutsdown or the block is broken
+     * @param tag nbt tag to save the information to
+     * @return returns the tag after calling the super function
+     */
     @Override
     @MethodsReturnNonnullByDefault
     public CompoundNBT write(CompoundNBT tag) {
@@ -133,6 +147,11 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
         return super.write(tag);
     }
 
+    /**
+     * Read values from nbt tag
+     * @param state the blocks current state
+     * @param tag the CompoundNBT to read from
+     */
     @Override
     @ParametersAreNonnullByDefault
     public void read(BlockState state, CompoundNBT tag) {
@@ -143,6 +162,11 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
 
         super.read(state, tag);
     }
+
+    /**
+     * createHandler initializes a handler for handling items stored in the Basic Generator
+     * @return returns the initialized handler
+     */
     private ItemStackHandler createHandler() {
             return new ItemStackHandler(1) {
                 @Override
@@ -161,6 +185,13 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
             };
     }
 
+    /**
+     * getCapability returns the capabilities the Basic Generator has if they are requested
+     * @param cap the capability type to get
+     * @param side the side of the block for the capability
+     * @param <T> Type of the capability
+     * @return
+     */
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -173,10 +204,20 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
         return super.getCapability(cap, side);
     }
 
+    /**
+     * isItemValid checks whether or not an item is valid for storage in this container
+     * @param slot the slot for the item
+     * @param stack the item that should be stored
+     * @return returns true if the item can be stored, false if it cannot
+     */
     public static boolean isItemValid(int slot, @Nonnull ItemStack stack) {
         return getBurnTime(stack) > 0;
     }
 
+    /**
+     * Class for handling energy storage (implements IEnergyCapability and works with RF/FE)
+     * @return the energy storage handler
+     */
     private CustomEnergyStorage createEnergy() {
         return new CustomEnergyStorage(Config.BASIC_GENERATOR_CAPACITY.get(), 0) {
             @Override

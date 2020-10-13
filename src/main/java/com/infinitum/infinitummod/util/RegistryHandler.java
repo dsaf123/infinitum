@@ -1,7 +1,7 @@
 package com.infinitum.infinitummod.util;
 
 import com.infinitum.infinitummod.blocks.*;
-import com.infinitum.infinitummod.blocks.basicgenerator.BasicGenerator;
+import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorBlock;
 import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorContainer;
 import com.infinitum.infinitummod.blocks.basicgenerator.BasicGeneratorTile;
 import com.infinitum.infinitummod.blocks.ores.TinOre;
@@ -70,7 +70,7 @@ public class RegistryHandler {
     public static final RegistryObject<Block> TIN_ORE = BLOCKS.register("tin_ore", TinOre::new);
     public static final RegistryObject<Block> MITHRIL_ORE = BLOCKS.register("mithril_ore", TinOre::new);
     public static final RegistryObject<Block> ADAMANT_ORE = BLOCKS.register("adamant_ore", TinOre::new);
-    public static final RegistryObject<Block> BASIC_GENERATOR = BLOCKS.register("basic_generator", BasicGenerator::new);
+    public static final RegistryObject<Block> BASIC_GENERATOR = BLOCKS.register("basic_generator", BasicGeneratorBlock::new);
 
     // Block Items
     public static final RegistryObject<Item> RUBY_BLOCK_ITEM = ITEMS.register("ruby_block", () -> new BlockItemBase(RUBY_BLOCK.get()));
