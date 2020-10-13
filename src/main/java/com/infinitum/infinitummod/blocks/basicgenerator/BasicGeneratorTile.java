@@ -1,6 +1,7 @@
 package com.infinitum.infinitummod.blocks.basicgenerator;
 
 import com.infinitum.infinitummod.tools.CustomEnergyStorage;
+import com.infinitum.infinitummod.util.Config;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 
@@ -94,14 +95,14 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
 
     private void sendOutPower() {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-        int maxGive = 1000;
+
         if (capacity.get() > 0) {
             for (Direction direction : Direction.values()) {
                 TileEntity te = world.getTileEntity(pos.offset(direction));
                 if (te != null) {
                     boolean doContinue = te.getCapability(CapabilityEnergy.ENERGY, direction).map(handler -> {
                                 if (handler.canReceive()) {
-                                    int received = handler.receiveEnergy(Math.min(capacity.get(), maxGive), false);
+                                    int received = handler.receiveEnergy(Math.min(capacity.get(), Config.BASIC_GENERATOR_MAX_EXTRACT.get()), false);
                                     capacity.set(capacity.get() - received);
                                     energyStorage.consumeEnergy(received);
                                     markDirty();
@@ -180,7 +181,7 @@ public class BasicGeneratorTile extends TileEntity implements ITickableTileEntit
     }
 
     private CustomEnergyStorage createEnergy() {
-        return new CustomEnergyStorage(100000, 0) {
+        return new CustomEnergyStorage(Config.BASIC_GENERATOR_CAPACITY.get(), 0) {
             @Override
             protected void onEnergyChanged() {
                 markDirty();

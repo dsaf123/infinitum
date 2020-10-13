@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "infinitummod:blocks/basic_generator_side",
+    "north": "infinitummod:blocks/basic_generator_front_on",
+    "south": "infinitummod:blocks/basic_generator_side",
+    "east": "infinitummod:blocks/basic_generator_side",
+    "west": "infinitummod:blocks/basic_generator_side",
+    "up": "infinitummod:blocks/basic_generator_top",
+    "down": "infinitummod:blocks/basic_generator_top"
+  }
+}

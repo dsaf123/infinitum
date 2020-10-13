@@ -1,10 +1,16 @@
 {
   "variants": {
-    "facing=north": { "model": "infinitummod:block/basic_generator" },
-    "facing=south": { "model": "infinitummod:block/basic_generator", "y": 180 },
-    "facing=east": { "model": "infinitummod:block/basic_generator", "y": 90 },
-    "facing=west": { "model": "infinitummod:block/basic_generator","y": 270 },
-    "facing=up": { "model": "infinitummod:block/basic_generator", "x": -90 },
-    "facing=down": { "model": "infinitummod:block/basic_generator", "x": 90 }
+    "facing=north,powered=false": { "model": "infinitummod:block/basic_generator" },
+    "facing=south,powered=false": { "model": "infinitummod:block/basic_generator", "y": 180 },
+    "facing=east,powered=false": { "model": "infinitummod:block/basic_generator", "y": 90 },
+    "facing=west,powered=false": { "model": "infinitummod:block/basic_generator","y": 270 },
+    "facing=up,powered=false": { "model": "infinitummod:block/basic_generator", "x": -90 },
+    "facing=down,powered=false": { "model": "infinitummod:block/basic_generator", "x": 90 },
+    "facing=north,powered=true": { "model": "infinitummod:block/basic_generator_powered" },
+    "facing=south,powered=true": { "model": "infinitummod:block/basic_generator_powered", "y": 180 },
+    "facing=east,powered=true": { "model": "infinitummod:block/basic_generator_powered", "y": 90 },
+    "facing=west,powered=true": { "model": "infinitummod:block/basic_generator_powered","y": 270 },
+    "facing=up,powered=true": { "model": "infinitummod:block/basic_generator_powered", "x": -90 },
+    "facing=down,powered=true": { "model": "infinitummod:block/basic_generator_powered", "x": 90 }
   }
 }

@@ -2,12 +2,14 @@ package com.infinitum.infinitummod.blocks.basicgenerator;
 
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -25,6 +27,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BasicGenerator extends Block {
     public BasicGenerator() {
@@ -33,15 +36,32 @@ public class BasicGenerator extends Block {
                 .sound(SoundType.METAL)
                 .harvestLevel(3)
                 .harvestTool(ToolType.PICKAXE)
-                .setLightLevel((val) -> 15)
-        );
-        //setRegistryName("basic_generator");
+                .setLightLevel((v) -> 14)
 
+        );
+
+
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
+    }
+
+    @Override
+    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+        return state.get(BlockStateProperties.POWERED) ? super.getLightValue(state, world, pos) : 0;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return getDefaultState().with(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite()).with(BlockStateProperties.POWERED, false);
     }
 
     @Nullable
